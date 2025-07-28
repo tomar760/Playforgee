@@ -1,24 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dashboard</title>
-  <link rel="stylesheet" href="style.css"/>
-</head>
-<body>
-  <div class="container">
-    <h1>Your Dashboard</h1>
-    <p id="email"></p>
-    <p>Coins: <span id="coins">0</span></p>
-    <button onclick="startGame()">Play Game</button>
-    <button onclick="logout()">Logout</button>
-  </div>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PlayForge - Game</title>
+  <link rel="stylesheet" href="style.css">
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
   <script src="firebase-config.js"></script>
-  <script src="game.js"></script>
+</head>
+<body class="game-body">
+  <div class="game-header">
+    <h1>Welcome, <span id="userEmail"></span></h1>
+    <p>Coins: <span id="userCoins">0</span></p>
+    <button onclick="logout()">Logout</button>
+  </div>
+
+  <div class="game-section">
+    <h2>Choose a Color</h2>
+    <div class="color-buttons">
+      <button onclick="chooseColor('Red')">🔴 Red</button>
+      <button onclick="chooseColor('Green')">🟢 Green</button>
+      <button onclick="chooseColor('Violet')">🟣 Violet</button>
+    </div>
+    <div id="countdown">Next round in: <span id="timer">25</span>s</div>
+    <div id="lastResult">Last Winning Color: <span id="winningColor">-</span></div>
+  </div>
+
+  <script src="scripts/game.js"></script>
 </body>
 </html>
