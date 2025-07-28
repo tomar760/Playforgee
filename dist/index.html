@@ -3,66 +3,53 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PlayForge - Login</title>
+  <title>PlayForge - Login/Register</title>
   <link rel="stylesheet" href="style.css" />
-
-  <!-- Firebase v8 SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
-  <!-- Firebase Config -->
-  <script>
-    const firebaseConfig = {
-  apiKey: "AIzaSyDcJdokra81YJFijCzH3EvUpgjcbj7P9o0",
-  authDomain: "playforgeee.firebaseapp.com",
-  projectId: "playforgeee",
-  storageBucket: "playforgeee.firebasestorage.app",
-  messagingSenderId: "440850239809",
-  appId: "1:440850239809:web:5795270644cdb1437ed1c0",
-  measurementId: "G-Y8S30GCX80"
-};
-
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.database();
-  </script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
+  <script src="firebase-config.js" defer></script>
+  <script src="auth.js" defer></script>
 </head>
 <body>
-  <div class="container">
-    <h1>Welcome to <span class="highlight">PlayForge</span></h1>
-    
-    <input type="email" id="email" placeholder="Email" />
-    <input type="password" id="password" placeholder="Password" />
-
-    <button onclick="login()">Login</button>
-    <p>New here? <a href="#" onclick="register()">Register</a></p>
+  <div class="login-container">
+    <div class="card">
+      <div class="toggle-container">
+        <button id="loginToggle" class="active">Login</button>
+        <button id="registerToggle">Register</button>
+      </div>
+      <h2 id="formTitle">Login to PlayForge</h2>
+      <input type="email" id="email" placeholder="Email" />
+      <input type="password" id="password" placeholder="Password" />
+      <button id="actionButton" onclick="login()">Login</button>
+    </div>
   </div>
 
   <script>
-    function login() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+    const loginToggle = document.getElementById("loginToggle");
+    const registerToggle = document.getElementById("registerToggle");
+    const formTitle = document.getElementById("formTitle");
+    const actionButton = document.getElementById("actionButton");
 
-      auth.signInWithEmailAndPassword(email, password)
-        .then(() => window.location.href = "dashboard.html")
-        .catch(err => alert("❌ " + err.message));
-    }
+    let isLogin = true;
 
-    function register() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+    loginToggle.onclick = () => {
+      isLogin = true;
+      formTitle.innerText = "Login to PlayForge";
+      actionButton.innerText = "Login";
+      actionButton.setAttribute("onclick", "login()");
+      loginToggle.classList.add("active");
+      registerToggle.classList.remove("active");
+    };
 
-      auth.createUserWithEmailAndPassword(email, password)
-        .then((cred) => {
-          db.ref("users/" + cred.user.uid).set({
-            email: email,
-            coins: 100
-          });
-          alert("✅ Registered! You can now login.");
-        })
-        .catch(err => alert("❌ " + err.message));
-    }
+    registerToggle.onclick = () => {
+      isLogin = false;
+      formTitle.innerText = "Register for PlayForge";
+      actionButton.innerText = "Register";
+      actionButton.setAttribute("onclick", "register()");
+      registerToggle.classList.add("active");
+      loginToggle.classList.remove("active");
+    };
   </script>
 </body>
 </html>
