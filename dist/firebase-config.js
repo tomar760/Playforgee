@@ -1,14 +1,12 @@
-const firebaseConfig = {
-  apiKey: "AIzaSyBnuhWybguIiv0IInLqL4fAz2lUR7KoBHA",
-  authDomain: "playforgeee.firebaseapp.com",
-  databaseURL: "https://playforgeee-default-rtdb.firebaseio.com",
-  projectId: "playforgeee",
-  storageBucket: "playforgeee.appspot.com",
-  messagingSenderId: "1018790311417",
-  appId: "1:1018790311417:web:00c3f038531a7e28c26a9f"
-};
+// firebase-config.js
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.database();
+export const firebaseConfig = {
+  apiKey: "AIzaSyDcJdokra81YJFijCzH3EvUpgjcbj7P9o0",
+  authDomain: "playforgeee.firebaseapp.com",
+  projectId: "playforgeee",
+  storageBucket: "playforgeee.firebasestorage.app",
+  messagingSenderId: "440850239809",
+  appId: "1:440850239809:web:5795270644cdb1437ed1c0",
+  measurementId: "G-Y8S30GCX80",
+  databaseURL: "https://playforgeee-default-rtdb.asia-southeast1.firebasedatabase.app"
+};
