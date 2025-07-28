@@ -1,23 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin Panel</title>
-  <link rel="stylesheet" href="style.css"/>
-</head>
-<body>
-  <div class="container">
-    <h1>Admin Panel</h1>
-    <input type="text" id="userId" placeholder="User UID" />
-    <input type="number" id="coins" placeholder="Coins to Add/Set" />
-    <button onclick="updateCoins()">Update Coins</button>
-    <div id="status"></div>
-  </div>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PlayForge Admin Panel</title>
+  <link rel="stylesheet" href="style.css">
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
   <script src="firebase-config.js"></script>
-  <script src="admin.js"></script>
+</head>
+<body class="admin-body">
+  <div class="admin-panel">
+    <h1>Admin Control Panel</h1>
+    <p>Logged in as Admin</p>
+
+    <h3>Set Winning Color:</h3>
+    <select id="adminColor">
+      <option value="Red">Red</option>
+      <option value="Green">Green</option>
+      <option value="Violet">Violet</option>
+    </select>
+    <button onclick="setWinningColor()">Submit Result</button>
+
+    <h3>Current Round: <span id="currentRound">Loading...</span></h3>
+
+    <h3>User Activity</h3>
+    <div id="userRecords">Loading records...</div>
+
+    <button onclick="logout()">Logout</button>
+  </div>
+
+  <script src="scripts/admin.js"></script>
 </body>
 </html>
