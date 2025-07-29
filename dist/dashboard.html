@@ -3,33 +3,50 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PlayForge Dashboard</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
+  <title>PlayForge - Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <script type="module" src="game.js" defer></script>
 </head>
-<body class="dashboard-body">
-  <div class="dashboard-container">
-    <h1>🎮 Welcome to PlayForge</h1>
-    <h2 id="welcomeUser">Hi, Player!</h2>
-    <h3>Your Coins: <span id="userCoins">0</span></h3>
+<body class="dashboard-page">
 
-    <div class="color-buttons">
-      <button onclick="makeChoice('Red')" class="red">Red</button>
-      <button onclick="makeChoice('Green')" class="green">Green</button>
-      <button onclick="makeChoice('Violet')" class="violet">Violet</button>
-    </div>
-
-    <div class="game-status">
-      <p id="countdown">Starting next round...</p>
-      <p id="result">-</p>
-    </div>
-
-    <button onclick="logout()" class="logout-btn">Logout</button>
+  <!-- LOGO -->
+  <div class="logo-box">
+    <img src="assets/logo1.png" alt="PlayForge Logo" class="logo-img" />
   </div>
 
-  <script type="module" src="js/firebase-config.js"></script>
-  <script type="module" src="js/dashboard.js"></script>
+  <!-- Welcome Message -->
+  <h2 id="welcome" class="welcome-text">Welcome</h2>
+
+  <!-- Coin Balance -->
+  <div class="coin-box">
+    <strong id="coins">Coins: 0</strong>
+  </div>
+
+  <!-- Timer -->
+  <div class="timer-box">
+    Next Result In: <span id="timer">25</span> seconds
+  </div>
+
+  <!-- Betting Buttons -->
+  <div class="game-box">
+    <h3>Choose Your Color</h3>
+    <div class="buttons">
+      <button class="color-btn red" onclick="placeBet('Red')">🔴 Red</button>
+      <button class="color-btn green" onclick="placeBet('Green')">🟢 Green</button>
+      <button class="color-btn violet" onclick="placeBet('Violet')">🟣 Violet</button>
+    </div>
+  </div>
+
+  <!-- Game Result -->
+  <div id="result" class="result-box">Waiting for result...</div>
+
+  <!-- Manual Result for Admin (Optional) -->
+  <div id="admin-controls" class="admin-box">
+    <h4>Set Manual Result</h4>
+    <button onclick="setManualResult('Red')">Red</button>
+    <button onclick="setManualResult('Green')">Green</button>
+    <button onclick="setManualResult('Violet')">Violet</button>
+  </div>
+
 </body>
 </html>
