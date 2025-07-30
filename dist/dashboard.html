@@ -2,51 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PlayForge - Dashboard</title>
-  <link rel="stylesheet" href="style.css" />
-  <script type="module" src="game.js" defer></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard • PlayForge</title>
+  <link rel="stylesheet" href="css/dashboard.css" />
 </head>
-<body class="dashboard-page">
+<body>
+  <div class="dash-container">
+    <header>
+      <img src="assets/playforge-logo.png" alt="Logo" class="logo" />
+      <button id="logoutBtn">Logout</button>
+    </header>
+    <main>
+      <h2 class="fade-in">Welcome <span id="userEmail"></span></h2>
 
-  <!-- LOGO -->
-  <div class="logo-box">
-    <img src="assets/logo1.png" alt="PlayForge Logo" class="logo-img" />
+      <div class="card-grid">
+        <div class="card slide-up">🎮 Play Games</div>
+        <div class="card slide-up delay-1">💰 Wallet</div>
+        <div class="card slide-up delay-2">📜 History</div>
+      </div>
+    </main>
   </div>
 
-  <!-- Welcome Message -->
-  <h2 id="welcome" class="welcome-text">Welcome</h2>
-
-  <!-- Coin Balance -->
-  <div class="coin-box">
-    <strong id="coins">Coins: 0</strong>
-  </div>
-
-  <!-- Timer -->
-  <div class="timer-box">
-    Next Result In: <span id="timer">25</span> seconds
-  </div>
-
-  <!-- Betting Buttons -->
-  <div class="game-box">
-    <h3>Choose Your Color</h3>
-    <div class="buttons">
-      <button class="color-btn red" onclick="placeBet('Red')">🔴 Red</button>
-      <button class="color-btn green" onclick="placeBet('Green')">🟢 Green</button>
-      <button class="color-btn violet" onclick="placeBet('Violet')">🟣 Violet</button>
-    </div>
-  </div>
-
-  <!-- Game Result -->
-  <div id="result" class="result-box">Waiting for result...</div>
-
-  <!-- Manual Result for Admin (Optional) -->
-  <div id="admin-controls" class="admin-box">
-    <h4>Set Manual Result</h4>
-    <button onclick="setManualResult('Red')">Red</button>
-    <button onclick="setManualResult('Green')">Green</button>
-    <button onclick="setManualResult('Violet')">Violet</button>
-  </div>
-
+  <script type="module" src="js/dashboard.js"></script>
 </body>
 </html>
