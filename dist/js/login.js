@@ -9,6 +9,7 @@ import {
   getFirestore, doc, getDoc, setDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
+/* Firebase Config */
 const firebaseConfig = {
   apiKey: "AIzaSyDcJdokra81YJFijCzH3EvUpgjcbj7P9o0",
   authDomain: "playforgeee.firebaseapp.com",
@@ -17,36 +18,42 @@ const firebaseConfig = {
 };
 const DASHBOARD_URL = "/dashboard.html";
 
+/* Init */
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 await setPersistence(auth, browserLocalPersistence);
 
 /* Elements */
-const loginForm = document.getElementById("loginForm");
-const registerForm = document.getElementById("registerForm");
-const loginMsg = document.getElementById("loginMsg");
-const registerMsg = document.getElementById("registerMsg");
+const loginBox = document.getElementById("loginBox");
+const registerBox = document.getElementById("registerBox");
+const statusMsg = document.getElementById("status-message");
 const loader = document.getElementById("loader");
+
+const loginBtn = document.getElementById("loginBtn");
+const registerBtn = document.getElementById("registerBtn");
+
 const pinModal = document.getElementById("pinModal");
 const pinCells = document.querySelectorAll(".pin-cell");
 const pinSubmit = document.getElementById("pinSubmit");
-const pinMsg = document.getElementById("pinMsg");
 const pinClear = document.getElementById("pinClear");
+const pinMsg = document.getElementById("pinMsg");
+const pinTitle = document.getElementById("pinTitle");
 
-/* Toggle Forms */
+/* Switch forms */
 document.getElementById("showRegister").onclick = () => {
-  loginForm.classList.remove("active");
-  registerForm.classList.add("active");
+  loginBox.classList.add("hidden");
+  registerBox.classList.remove("hidden");
+  statusMsg.innerText = "";
 };
 document.getElementById("showLogin").onclick = () => {
-  registerForm.classList.remove("active");
-  loginForm.classList.add("active");
+  registerBox.classList.add("hidden");
+  loginBox.classList.remove("hidden");
+  statusMsg.innerText = "";
 };
 
 /* Login */
-loginForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
+loginBtn.addEventListener("click", async () => {
   loader.classList.remove("hidden");
   try {
     const email = document.getElementById("loginEmail").value;
@@ -54,54 +61,45 @@ loginForm.addEventListener("submit", async (e) => {
     const cred = await signInWithEmailAndPassword(auth, email, password);
 
     if (!cred.user.emailVerified) {
-      loginMsg.textContent = "Please verify your email!";
+      statusMsg.innerText = "Please verify your email first!";
       await signOut(auth);
       loader.classList.add("hidden");
       return;
     }
-
     sessionStorage.removeItem("pinVerified");
     await openPinGate(cred.user.uid);
+
   } catch (err) {
-    loginMsg.textContent = err.message;
+    statusMsg.innerText = err.message;
   } finally {
     loader.classList.add("hidden");
   }
 });
 
 /* Register */
-registerForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
+registerBtn.addEventListener("click", async () => {
   loader.classList.remove("hidden");
   try {
     const email = document.getElementById("regEmail").value;
     const p1 = document.getElementById("regPassword").value;
     const p2 = document.getElementById("regPassword2").value;
+
     if (p1 !== p2) {
-      registerMsg.textContent = "Passwords do not match!";
+      statusMsg.innerText = "Passwords do not match!";
       loader.classList.add("hidden");
       return;
     }
     const cred = await createUserWithEmailAndPassword(auth, email, p1);
     await sendEmailVerification(cred.user);
-    registerMsg.textContent = "Verification email sent!";
+    statusMsg.innerText = "Verification email sent! Check inbox.";
+    registerBox.classList.add("hidden");
+    loginBox.classList.remove("hidden");
   } catch (err) {
-    registerMsg.textContent = err.message;
+    statusMsg.innerText = err.message;
   } finally {
     loader.classList.add("hidden");
   }
 });
-
-/* Forgot password */
-document.getElementById("forgotPass").onclick = async () => {
-  const email = document.getElementById("loginEmail").value;
-  if (!email) {
-    loginMsg.textContent = "Enter your email first!";
-    return;
-  }
-  await sendPasswordResetEmail(auth, email);
-  loginMsg.textContent = "Password reset email sent!";
-};
 
 /* PIN Gate */
 pinCells.forEach((cell, idx) => {
@@ -115,19 +113,24 @@ pinClear.addEventListener("click", () => {
 });
 
 async function openPinGate(uid) {
-  pinModal.classList.remove("hidden");
   const ref = doc(db, "userSecrets", uid);
   const snap = await getDoc(ref);
+
+  if (snap.exists()) {
+    pinTitle.innerText = "Enter your 4-digit PIN";
+  } else {
+    pinTitle.innerText = "Set your 4-digit PIN";
+  }
+
+  pinModal.classList.remove("hidden");
 
   pinSubmit.onclick = async () => {
     const pin = Array.from(pinCells).map(c => c.value).join("");
     if (pin.length !== 4) {
-      pinMsg.textContent = "Enter 4 digits!";
+      pinMsg.innerText = "Enter 4 digits!";
       return;
     }
-
     if (!snap.exists()) {
-      // Save new PIN hashed
       const hashed = await hashPIN(pin);
       await setDoc(ref, { pin: hashed, createdAt: serverTimestamp() });
       sessionStorage.setItem("pinVerified", "true");
@@ -137,16 +140,26 @@ async function openPinGate(uid) {
         sessionStorage.setItem("pinVerified", "true");
         window.location.href = DASHBOARD_URL;
       } else {
-        pinMsg.textContent = "Wrong PIN!";
+        pinMsg.innerText = "Wrong PIN!";
       }
     }
   };
 }
 
-/* Hash helper */
+/* Hashing */
 async function hashPIN(pin) {
   const enc = new TextEncoder();
   const digest = await crypto.subtle.digest("SHA-256", enc.encode(pin));
   return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, "0")).join("");
 }
-async function verifyPIN(pin, savedHash)
+async function verifyPIN(pin, savedHash) {
+  const hash = await hashPIN(pin);
+  return hash === savedHash;
+}
+
+/* Guard */
+onAuthStateChanged(auth, (user) => {
+  if (user && sessionStorage.getItem("pinVerified") === "true") {
+    window.location.href = DASHBOARD_URL;
+  }
+});
