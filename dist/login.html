@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login • PlayForge</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="login-container">
+    <div class="logo">
+      <img src="assets/playforge-logo.png" alt="Logo">
+    </div>
+
+    <!-- Login -->
+    <form id="loginForm" class="active">
+      <input type="email" id="loginEmail" placeholder="Email" required>
+      <input type="password" id="loginPassword" placeholder="Password" required>
+      <button type="submit">Login</button>
+      <p class="msg" id="loginMsg"></p>
+      <a id="forgotPass">Forgot Password?</a>
+      <p>New here? <span id="showRegister">Create Account</span></p>
+    </form>
+
+    <!-- Register -->
+    <form id="registerForm">
+      <input type="email" id="regEmail" placeholder="Email" required>
+      <input type="password" id="regPassword" placeholder="Password" required>
+      <input type="password" id="regPassword2" placeholder="Confirm Password" required>
+      <button type="submit">Register</button>
+      <p class="msg" id="registerMsg"></p>
+      <p>Already have account? <span id="showLogin">Login</span></p>
+    </form>
+  </div>
+
+  <!-- PIN Modal -->
+  <div id="pinModal" class="modal hidden">
+    <div class="modal-box">
+      <h3 id="pinTitle">Set 4-digit PIN</h3>
+      <div class="pin-row">
+        <input type="password" maxlength="1" class="pin-cell">
+        <input type="password" maxlength="1" class="pin-cell">
+        <input type="password" maxlength="1" class="pin-cell">
+        <input type="password" maxlength="1" class="pin-cell">
+      </div>
+      <p class="msg" id="pinMsg"></p>
+      <button id="pinSubmit">Continue</button>
+      <button id="pinClear">Clear</button>
+    </div>
+  </div>
+
+  <div id="loader" class="loader hidden">Loading...</div>
+
+  <script type="module" src="js/login.js"></script>
+</body>
+</html>
