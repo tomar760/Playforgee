@@ -1,3 +1,51 @@
+/* PIN Modal */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.hidden { display: none; }
+
+.modal-box {
+  background: #1e293b;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  width: 90%;
+  max-width: 350px;
+  animation: slideIn 0.3s ease;
+}
+
+.pin-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 10px 0;
+}
+.pin-cell {
+  width: 50px;
+  text-align: center;
+  font-size: 20px;
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  background: #334155;
+  color: #fff;
+}
+
+.loader {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-size: 18px;
+}
 /* Global Reset */
 * {
   margin: 0;
@@ -137,3 +185,53 @@ body.login-page {
     font-size: 15px;
   }
 }
+
+/* PIN Modal */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.hidden { display: none; }
+
+.modal-box {
+  background: #1e293b;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  width: 90%;
+  max-width: 350px;
+  animation: slideIn 0.3s ease;
+}
+
+.pin-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 10px 0;
+}
+.pin-cell {
+  width: 50px;
+  text-align: center;
+  font-size: 20px;
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  background: #334155;
+  color: #fff;
+}
+
+.loader {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-size: 18px;
+}
+
