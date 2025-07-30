@@ -14,83 +14,43 @@
 
     <!-- Login Form -->
     <div class="form-box" id="loginBox">
-      <input type="email" id="email" placeholder="Enter Email" required />
-      <input type="password" id="password" placeholder="Enter Password" required />
-      <button onclick="login()">Login</button>
-      <p class="toggle-link">Don't have an account? <a href="#" onclick="toggleForm()">Register</a></p>
+      <input type="email" id="loginEmail" placeholder="Enter Email" required />
+      <input type="password" id="loginPassword" placeholder="Enter Password" required />
+      <button id="loginBtn">Login</button>
+      <p class="toggle-link">Don't have an account? <a href="#" id="showRegister">Register</a></p>
     </div>
 
     <!-- Register Form -->
     <div class="form-box hidden" id="registerBox">
       <input type="email" id="regEmail" placeholder="Email" />
       <input type="password" id="regPassword" placeholder="Password" />
-      <button onclick="register()">Register</button>
-      <p class="toggle-link">Already have an account? <a href="#" onclick="toggleForm()">Login</a></p>
+      <input type="password" id="regPassword2" placeholder="Confirm Password" />
+      <button id="registerBtn">Register</button>
+      <p class="toggle-link">Already have an account? <a href="#" id="showLogin">Login</a></p>
     </div>
 
     <p id="status-message" class="status-text"></p>
   </div>
 
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <!-- PIN Modal -->
+  <div id="pinModal" class="modal hidden">
+    <div class="modal-box">
+      <h3 id="pinTitle">Set 4-digit PIN</h3>
+      <div class="pin-row">
+        <input type="password" maxlength="1" class="pin-cell" />
+        <input type="password" maxlength="1" class="pin-cell" />
+        <input type="password" maxlength="1" class="pin-cell" />
+        <input type="password" maxlength="1" class="pin-cell" />
+      </div>
+      <p class="msg" id="pinMsg"></p>
+      <button id="pinSubmit">Continue</button>
+      <button id="pinClear">Clear</button>
+    </div>
+  </div>
 
-  <!-- Firebase Config -->
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyDcJdokra81YJFijCzH3EvUpgjcbj7P9o0",
-      authDomain: "playforgeee.firebaseapp.com",
-      databaseURL: "https://playforgeee-default-rtdb.firebaseio.com",
-      projectId: "playforgeee",
-      storageBucket: "playforgeee.appspot.com",
-      messagingSenderId: "440850239809",
-      appId: "1:440850239809:web:5795270644cdb1437ed1c0"
-    };
-    firebase.initializeApp(firebaseConfig);
-  </script>
+  <div id="loader" class="loader hidden">Loading...</div>
 
-  <!-- Custom Auth Logic -->
-  <script>
-    const loginBox = document.getElementById("loginBox");
-    const registerBox = document.getElementById("registerBox");
-
-    function toggleForm() {
-      loginBox.classList.toggle("hidden");
-      registerBox.classList.toggle("hidden");
-      document.getElementById("status-message").innerText = "";
-    }
-
-    function login() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      firebase.auth().signInWithEmailAndPassword(email, password)
-        .then(() => {
-          window.location.href = "dashboard.html";
-        })
-        .catch(error => {
-          document.getElementById("status-message").innerText = error.message;
-        });
-    }
-
-    function register() {
-      const email = document.getElementById("regEmail").value;
-      const password = document.getElementById("regPassword").value;
-      firebase.auth().createUserWithEmailAndPassword(email, password)
-        .then(userCredential => {
-          const uid = userCredential.user.uid;
-          firebase.database().ref("users/" + uid).set({
-            email: email,
-            coins: 100,
-            joinedAt: new Date().toISOString()
-          });
-          document.getElementById("status-message").innerText = "Registered successfully! You can now login.";
-          toggleForm();
-        })
-        .catch(error => {
-          document.getElementById("status-message").innerText = error.message;
-        });
-    }
-  </script>
+  <!-- Firebase Modular SDKs -->
+  <script type="module" src="js/login.js"></script>
 </body>
 </html>
