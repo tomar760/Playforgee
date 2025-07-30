@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login • PlayForge</title>
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="login-box">
+      <div class="logo">
+        <img src="assets/playforge-logo.png" alt="PlayForge Logo" />
+        <h2>PlayForge</h2>
+      </div>
+
+      <!-- Forms Wrapper -->
+      <div class="forms-wrapper">
+        <!-- Login Form -->
+        <form id="loginForm" class="form-slide active">
+          <input type="email" id="loginEmail" placeholder="Email Address" required />
+          <input type="password" id="loginPassword" placeholder="Password" required />
+          <button type="submit">Login</button>
+          <p class="msg" id="loginMsg"></p>
+          <p><a id="forgotPass">Forgot Password?</a></p>
+          <p class="switch">Don't have an account? <span id="showRegister">Register</span></p>
+        </form>
+
+        <!-- Register Form -->
+        <form id="registerForm" class="form-slide">
+          <input type="email" id="regEmail" placeholder="Email Address" required />
+          <input type="password" id="regPassword" placeholder="Password" required />
+          <input type="password" id="regPassword2" placeholder="Confirm Password" required />
+          <button type="submit">Register</button>
+          <p class="msg" id="registerMsg"></p>
+          <p class="switch">Already have an account? <span id="showLogin">Login</span></p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- PIN Modal -->
+  <div id="pinModal" class="modal hidden">
+    <div class="modal-content animate-zoom">
+      <h3 id="pinTitle">Set your 4-digit PIN</h3>
+      <p id="pinSubtitle">This PIN will be required each time you log in.</p>
+      <div class="pin-inputs">
+        <input type="password" maxlength="1" class="pin-cell" />
+        <input type="password" maxlength="1" class="pin-cell" />
+        <input type="password" maxlength="1" class="pin-cell" />
+        <input type="password" maxlength="1" class="pin-cell" />
+      </div>
+      <p class="msg" id="pinMsg"></p>
+      <button id="pinSubmit">Continue</button>
+      <button id="pinClear">Clear</button>
+    </div>
+  </div>
+
+  <div id="loader" class="loader hidden">Loading...</div>
+
+  <script type="module" src="js/auth.js"></script>
+</body>
+</html>
