@@ -66,6 +66,7 @@ loginBtn.addEventListener("click", async () => {
       loader.classList.add("hidden");
       return;
     }
+
     sessionStorage.removeItem("pinVerified");
     await openPinGate(cred.user.uid);
 
@@ -89,11 +90,20 @@ registerBtn.addEventListener("click", async () => {
       loader.classList.add("hidden");
       return;
     }
+
     const cred = await createUserWithEmailAndPassword(auth, email, p1);
     await sendEmailVerification(cred.user);
+
+    // ✅ Firestore user document with coins
+    await setDoc(doc(db, "users", cred.user.uid), {
+      coins: 100,
+      createdAt: serverTimestamp()
+    });
+
     statusMsg.innerText = "Verification email sent! Check inbox.";
     registerBox.classList.add("hidden");
     loginBox.classList.remove("hidden");
+
   } catch (err) {
     statusMsg.innerText = err.message;
   } finally {
