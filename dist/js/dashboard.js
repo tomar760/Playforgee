@@ -18,6 +18,44 @@ onAuthStateChanged(auth, (user) => {
     document.getElementById("userEmail").textContent = user.email;
   }
 });
+// dashboard.js
+firebase.auth().onAuthStateChanged(user => {
+  if (!user) {
+    window.location.href = "index.html";
+    return;
+  }
+
+  const uid = user.uid;
+  const balanceElement = document.getElementById("coinBalance");
+  const resultStrip = document.getElementById("resultStrip");
+
+  const userRef = firebase.database().ref("users/" + uid);
+  userRef.on("value", snapshot => {
+    const data = snapshot.val();
+    if (data) {
+      balanceElement.innerText = data.coins ?? 0;
+    }
+  });
+
+  const resultRef = firebase.database().ref("game/results");
+  resultRef.limitToLast(20).on("value", snapshot => {
+    resultStrip.innerHTML = ""; // clear old
+    snapshot.forEach(child => {
+      const result = child.val();
+      const div = document.createElement("div");
+      div.classList.add("result-box", result.winningColor);
+      div.textContent = result.winningColor[0].toUpperCase(); // R/G/V
+      resultStrip.prepend(div);
+    });
+  });
+});
+
+function logout() {
+  firebase.auth().signOut().then(() => {
+    window.location.href = "index.html";
+  });
+}
+
 
 document.getElementById("logoutBtn").addEventListener("click", async () => {
   await signOut(auth);
