@@ -8,7 +8,12 @@
   <link rel="icon" href="assets/logo1.png" />
 </head>
 <body class="login-page">
-  <div class="login-container">
+
+  <!-- Loader -->
+  <div id="loader" class="loader">Loading...</div>
+
+  <!-- Main Login UI -->
+  <div class="login-container hidden" id="mainUI">
     <img src="assets/logo1.png" class="logo" alt="PlayForge Logo" />
     <h2>Welcome to <span>PlayForge</span></h2>
 
@@ -48,9 +53,41 @@
     </div>
   </div>
 
-  <div id="loader" class="loader hidden">Loading...</div>
+  <!-- Firebase Modular SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-  <!-- Firebase Modular SDKs -->
+    const firebaseConfig = {
+      apiKey: "AIzaSyDcJdokra81YJFijCzH3EvUpgjcbj7P9o0",
+      authDomain: "playforgeee.firebaseapp.com",
+      projectId: "playforgeee",
+      storageBucket: "playforgeee.appspot.com",
+      messagingSenderId: "440850239809",
+      appId: "1:440850239809:web:5795270644cdb1437ed1c0",
+      measurementId: "G-Y8S30GCX80"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+
+    const loader = document.getElementById("loader");
+    const mainUI = document.getElementById("mainUI");
+
+    // Firebase auth state check
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // If user is logged in, go to dashboard
+        window.location.href = "dashboard.html";
+      } else {
+        // Else, show login screen
+        loader.classList.add("hidden");
+        mainUI.classList.remove("hidden");
+      }
+    });
+  </script>
+
+  <!-- Your Main Login Logic -->
   <script type="module" src="js/login.js"></script>
 </body>
 </html>
