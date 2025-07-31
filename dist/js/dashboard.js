@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDcJdokra81YJFijCzH3EvUpgjcbj7P9o0",
@@ -16,9 +16,8 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const db = getFirestore();
 
-// DOM elements
-const balanceText = document.getElementById("balance");
-const emailText = document.getElementById("userEmail");
+// DOM elements (✅ fix kiya yaha)
+const balanceText = document.getElementById("coinBalance"); // sahi ID
 const logoutBtn = document.getElementById("logoutBtn");
 
 onAuthStateChanged(auth, async (user) => {
@@ -31,21 +30,18 @@ onAuthStateChanged(auth, async (user) => {
   const userId = user.uid;
   const userRef = doc(db, "users", userId);
 
-  // Show email
-  emailText.textContent = user.email;
-
-  // Real-time coin updates
+  // ✅ Real-time coin updates
   onSnapshot(userRef, (docSnap) => {
     if (docSnap.exists()) {
       const data = docSnap.data();
-      balanceText.textContent = data.coins ?? 0;
+      balanceText.textContent = `${data.coins ?? 0} Coins`;
     } else {
-      balanceText.textContent = "0";
+      balanceText.textContent = "0 Coins";
     }
   });
 });
 
-// Logout
+// ✅ Logout button working
 logoutBtn.addEventListener("click", () => {
   signOut(auth).then(() => {
     window.location.href = "index.html";
