@@ -1,49 +1,35 @@
-<!-- dashboard.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PlayForge - Dashboard</title>
-  <link rel="stylesheet" href="dashboard.css" />
-  <script type="module" src="./scripts/dashboard.js" defer></script>
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <link rel="icon" href="assets/logo1.png" />
 </head>
 <body>
-  <header class="dashboard-header">
-    <h1>Welcome, <span id="username">User</span> ✨</h1>
+  <header>
+    <img src="assets/logo1.png" class="dash-logo" alt="logo" />
+    <h1>PlayForge</h1>
     <button id="logoutBtn">Logout</button>
   </header>
 
-  <main>
-    <section class="balance-card">
-      <h2>Your Coins</h2>
-      <div class="coin-display">
-        <img src="/assets/coin.png" alt="Coin" class="coin-icon" />
-        <span id="coinBalance">0</span>
-      </div>
-    </section>
+  <section class="balance-section">
+    <h2>Your Balance</h2>
+    <div id="coinBalance">Loading...</div>
+  </section>
 
-    <section class="recent-results">
-      <h3>Recent Results</h3>
-      <div id="resultStrip" class="result-strip"></div>
-    </section>
+  <section class="actions">
+    <a href="game.html" class="play-btn">🎮 Play Game</a>
+    <a href="history.html" class="play-btn">📜 Game History</a>
+    <a href="profile.html" class="play-btn">👤 Profile</a>
+  </section>
 
-    <section class="main-actions">
-      <a href="game.html" class="play-btn">Play Game</a>
-      <a href="history.html" class="history-btn">Game History</a>
-    </section>
-
-    <section class="admin-panel-link" id="adminLink">
-      <a href="admin.html">Go to Admin Panel ⚙</a>
-    </section>
-  </main>
-
-  <footer class="dashboard-footer">
-    <nav>
-      <a href="#" class="nav-item active">Home</a>
-      <a href="game.html" class="nav-item">Game</a>
-      <a href="history.html" class="nav-item">History</a>
-    </nav>
+  <footer>
+    <p>&copy; 2025 PlayForge</p>
   </footer>
+
+  <!-- Firebase SDK -->
+  <script type="module" src="js/dashboard.js"></script>
 </body>
 </html>
