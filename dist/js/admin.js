@@ -1,7 +1,17 @@
 // js/admin.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  doc,
+  updateDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // Firebase config
 const firebaseConfig = {
@@ -21,34 +31,64 @@ const db = getFirestore(app);
 const userList = document.getElementById("userList");
 const logoutBtn = document.getElementById("logoutBtn");
 
-// ✅ Replace with your real admin UID
-const adminUID = "04jxGU0m0cMs8TOUF3inSt8tU9u1";
+// ✅ Your admin UID here
+const adminUID = "PASTE_YOUR_ADMIN_UID_HERE";
 
 onAuthStateChanged(auth, async (user) => {
   if (!user || user.uid !== adminUID) {
-    alert("Unauthorized access. Admins only.");
+    alert("Unauthorized. Admins only.");
     window.location.href = "index.html";
     return;
   }
 
-  // Fetch all users
+  // Load all users
   const usersCol = collection(db, "users");
   const snapshot = await getDocs(usersCol);
+  userList.innerHTML = ""; // clear
 
-  snapshot.forEach(doc => {
-    const data = doc.data();
-    const div = document.createElement("div");
-    div.className = "user-card";
-    div.innerHTML = `
-      <strong>Email:</strong> ${data.email || "N/A"}<br>
-      <strong>Coins:</strong> ${data.coins ?? 0}
+  snapshot.forEach(docSnap => {
+    const data = docSnap.data();
+    const userId = docSnap.id;
+
+    const card = document.createElement("div");
+    card.className = "user-card";
+    card.innerHTML = `
+      <p><strong>Email:</strong> ${data.email || "N/A"}</p>
+      <p><strong>Coins:</strong> <span id="coins-${userId}">${data.coins ?? 0}</span></p>
+      <input type="number" id="input-${userId}" placeholder="New coins..." />
+      <button onclick="updateCoins('${userId}')">Update</button>
     `;
-    userList.appendChild(div);
+    userList.appendChild(card);
   });
 });
 
+// Logout
 logoutBtn.addEventListener("click", () => {
   signOut(auth).then(() => {
     window.location.href = "index.html";
   });
 });
+
+// Expose updateCoins globally
+window.updateCoins = async (userId) => {
+  const input = document.getElementById(`input-${userId}`);
+  const newCoins = parseInt(input.value);
+
+  if (isNaN(newCoins)) {
+    alert("Please enter a valid number");
+    return;
+  }
+
+  try {
+    const userRef = doc(db, "users", userId);
+    await updateDoc(userRef, { coins: newCoins });
+
+    // Update text instantly
+    document.getElementById(`coins-${userId}`).textContent = newCoins;
+    input.value = "";
+    alert("Coins updated ✅");
+  } catch (err) {
+    alert("Failed to update coins ❌");
+    console.error(err);
+  }
+};
