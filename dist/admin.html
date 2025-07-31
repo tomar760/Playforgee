@@ -1,29 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PlayForge Admin</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Dashboard - PlayForge</title>
+  <link rel="stylesheet" href="css/admin.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Admin Panel - <span class="brand">PlayForge</span></h1>
+  <header>
+    <h1>Admin Panel</h1>
+    <button id="logoutBtn">Logout</button>
+  </header>
 
-    <p>Current Winning Color (Manual):</p>
-    <select id="winningColor">
-      <option value="">-- Select (optional override) --</option>
-      <option value="Red">Red</option>
-      <option value="Green">Green</option>
-      <option value="Violet">Violet</option>
-    </select>
-    <button onclick="setColor()">Set Color</button>
-
-    <h3>User Game History</h3>
-    <div id="historyDisplay"></div>
-
-    <button onclick="logout()" class="logout-btn">Logout</button>
-  </div>
+  <section id="userList" class="user-list">
+    <p>Loading user data...</p>
+  </section>
 
   <script type="module" src="js/admin.js"></script>
 </body>
