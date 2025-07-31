@@ -30,3 +30,29 @@ button {
   margin-bottom: 10px;
   border-left: 5px solid limegreen;
 }
+
+.user-card {
+  background: #1f1f1f;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-left: 5px solid limegreen;
+}
+
+.user-card input {
+  margin-top: 5px;
+  padding: 6px;
+  width: 120px;
+  border: none;
+  outline: none;
+  background: #2b2b2b;
+  color: white;
+}
+
+.user-card button {
+  margin-left: 10px;
+  padding: 6px 10px;
+  background: deepskyblue;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
