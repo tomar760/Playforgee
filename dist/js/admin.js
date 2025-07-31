@@ -1,83 +1,54 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-import {
-  getAuth,
-  onAuthStateChanged,
-  signOut
-} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
-import {
-  getDatabase,
-  ref,
-  set,
-  onValue,
-  get,
-  child
-} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
-import { firebaseConfig } from "../firebase-config.js";
+// js/admin.js
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getDatabase(app);
-
-// Auth check
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    if (user.email !== "admin@playforge.com") {
-      alert("Access denied.");
-      window.location.href = "dashboard.html";
-    } else {
-      loadUserHistory();
-    }
-  } else {
-    window.location.href = "index.html";
-  }
-});
-
-// Manual color control
-window.setColor = function () {
-  const selected = document.getElementById("winningColor").value;
-  const adminRef = ref(db, "admin");
-  set(adminRef, {
-    manualControl: selected !== "",
-    manualWinningColor: selected
-  }).then(() => {
-    alert("Winning color updated!");
-  });
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyDcJdokra81YJFijCzH3EvUpgjcbj7P9o0",
+  authDomain: "playforgeee.firebaseapp.com",
+  projectId: "playforgeee",
+  storageBucket: "playforgeee.appspot.com",
+  messagingSenderId: "440850239809",
+  appId: "1:440850239809:web:5795270644cdb1437ed1c0",
+  measurementId: "G-Y8S30GCX80"
 };
 
-// Logout
-window.logout = function () {
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+const db = getFirestore(app);
+
+const userList = document.getElementById("userList");
+const logoutBtn = document.getElementById("logoutBtn");
+
+// ✅ Replace with your real admin UID
+const adminUID = "04jxGU0m0cMs8TOUF3inSt8tU9u1";
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user || user.uid !== adminUID) {
+    alert("Unauthorized access. Admins only.");
+    window.location.href = "index.html";
+    return;
+  }
+
+  // Fetch all users
+  const usersCol = collection(db, "users");
+  const snapshot = await getDocs(usersCol);
+
+  snapshot.forEach(doc => {
+    const data = doc.data();
+    const div = document.createElement("div");
+    div.className = "user-card";
+    div.innerHTML = `
+      <strong>Email:</strong> ${data.email || "N/A"}<br>
+      <strong>Coins:</strong> ${data.coins ?? 0}
+    `;
+    userList.appendChild(div);
+  });
+});
+
+logoutBtn.addEventListener("click", () => {
   signOut(auth).then(() => {
     window.location.href = "index.html";
   });
-};
-
-// Load recent history (last 5 entries for all users)
-function loadUserHistory() {
-  const historyRef = ref(db, "history");
-  onValue(historyRef, (snapshot) => {
-    const historyDisplay = document.getElementById("historyDisplay");
-    historyDisplay.innerHTML = "";
-    const data = snapshot.val();
-    if (data) {
-      for (let uid in data) {
-        const userLogs = data[uid];
-        for (let key in userLogs) {
-          const log = userLogs[key];
-          const logElement = document.createElement("div");
-          logElement.classList.add("history-entry");
-          logElement.innerHTML = `
-            <strong>User:</strong> ${uid}<br/>
-            <strong>Choice:</strong> ${log.color}<br/>
-            <strong>Result:</strong> ${log.result}<br/>
-            <strong>Win:</strong> ${log.win ? "✅" : "❌"}<br/>
-            <strong>Time:</strong> ${log.time}<br/><hr/>
-          `;
-          historyDisplay.appendChild(logElement);
-        }
-      }
-    } else {
-      historyDisplay.innerText = "No game history available yet.";
-    }
-  });
-}
+});
