@@ -32,7 +32,7 @@ const userList = document.getElementById("userList");
 const logoutBtn = document.getElementById("logoutBtn");
 
 // ✅ Your admin UID here
-const adminUID = "PASTE_YOUR_ADMIN_UID_HERE";
+const adminUID = "04jxGU0m0cMs8TOUF3inSt8tU9u1";
 
 onAuthStateChanged(auth, async (user) => {
   if (!user || user.uid !== adminUID) {
