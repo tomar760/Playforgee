@@ -1,59 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>My Profile - PlayForge</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/dashboard.css">
-</head>
-<body>
-  <header>
-    <h1>My Profile</h1>
-    <button onclick="window.location.href='dashboard.html'">Back</button>
-  </header>
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  <section class="balance-section">
-    <h2>Email</h2>
-    <div id="userEmail">Loading...</div>
-    <h2>Coins</h2>
-    <div id="userCoins">Loading...</div>
-  </section>
+const firebaseConfig = {
+  apiKey: "AIzaSyDcJdokra81YJFijCzH3EvUpgjcbj7P9o0",
+  authDomain: "playforgeee.firebaseapp.com",
+  projectId: "playforgeee",
+  storageBucket: "playforgeee.appspot.com",
+  messagingSenderId: "440850239809",
+  appId: "1:440850239809:web:5795270644cdb1437ed1c0",
+  measurementId: "G-Y8S30GCX80"
+};
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+const db = getFirestore();
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDcJdokra81YJFijCzH3EvUpgjcbj7P9o0",
-      authDomain: "playforgeee.firebaseapp.com",
-      projectId: "playforgeee",
-      storageBucket: "playforgeee.appspot.com",
-      messagingSenderId: "440850239809",
-      appId: "1:440850239809:web:5795270644cdb1437ed1c0",
-      measurementId: "G-Y8S30GCX80"
-    };
+// DOM elements
+const balanceText = document.getElementById("balance");
+const emailText = document.getElementById("userEmail");
+const logoutBtn = document.getElementById("logoutBtn");
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth();
-    const db = getFirestore();
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    // Not logged in
+    window.location.href = "index.html";
+    return;
+  }
 
-    const emailBox = document.getElementById("userEmail");
-    const coinsBox = document.getElementById("userCoins");
+  const userId = user.uid;
+  const userRef = doc(db, "users", userId);
 
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        window.location.href = "index.html";
-      } else {
-        emailBox.textContent = user.email;
-        const snap = await getDoc(doc(db, "users", user.uid));
-        if (snap.exists()) {
-          coinsBox.textContent = snap.data().coins ?? "0";
-        } else {
-          coinsBox.textContent = "0";
-        }
-      }
-    });
-  </script>
-</body>
-</html>
+  // Show email
+  emailText.textContent = user.email;
+
+  // Real-time coin updates
+  onSnapshot(userRef, (docSnap) => {
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      balanceText.textContent = data.coins ?? 0;
+    } else {
+      balanceText.textContent = "0";
+    }
+  });
+});
+
+// Logout
+logoutBtn.addEventListener("click", () => {
+  signOut(auth).then(() => {
+    window.location.href = "index.html";
+  }).catch((error) => {
+    alert("Error logging out: " + error.message);
+  });
+});
